@@ -32,7 +32,8 @@ everything so it doesn't look like a mess
 
 To setup the Raspberry PI Cluster you need the following tools to be installed:
 
-* Docker
+* [Docker](https://www.docker.com/)
+* [Ansible](https://www.ansible.com/) ([how to install it](https://valdhaus.co/writings/ansible-mac-osx/)
 * The Hypriot [flash utility](https://github.com/hypriot/flash)
 * (optional) [Pipe Viewer](http://brewformulas.org/Pv) to monitor the progress of data (handy when flashing SD cards)
 
@@ -40,8 +41,8 @@ To setup the Raspberry PI Cluster you need the following tools to be installed:
 
 For this demo, the cluster is setup as follow:
 
-* 4 Raspberry PIs acting as clients browsing the 2 data centers (`pi-client-01`, `pi-client-02`, `pi-client-03` and 
-`pi-client-04`)
+* 3 Raspberry PIs acting as clients browsing the 2 data centers (`pi-client-01`, `pi-client-02` and `pi-client-03`) 
+* 1 Load balancer for the clients (`pi-load-balancer`)
 * Data center [Thrall](https://en.wikipedia.org/wiki/Characters_of_Warcraft#Thrall) 
   * 1 load balancer (`pi-thrall-load-balancer`) 
   * 2 servers (`pi-thrall-server-01` and `pi-thrall-server-02`) 
@@ -61,9 +62,9 @@ Insert the SD card, and use the following commands to flash each cards (notice t
 the SD image):
 - `flash --hostname pi-client-01 https://github.com/hypriot/image-builder-rpi/releases/download/v1.5
 .0/hypriotos-rpi-v1.5.0.img.zip` # downloads and then flashes the card 
-- `flash --hostname pi-client-02 hypriotos-rpi-v1.5.0.img` # doesn't need to download the image anymore
+- `flash --hostname pi-client-02 hypriotos-rpi-v1.5.0.img` # doesn't need to download the image anymore, just flashes
 - `flash --hostname pi-client-03 hypriotos-rpi-v1.5.0.img`
-- `flash --hostname pi-client-04 hypriotos-rpi-v1.5.0.img`
+- `flash --hostname pi-load-balancer hypriotos-rpi-v1.5.0.img`
 - `flash --hostname pi-grom-load-balancer hypriotos-rpi-v1.5.0.img`
 - `flash --hostname pi-grom-server-01 hypriotos-rpi-v1.5.0.img`
 - `flash --hostname pi-grom-server-02 hypriotos-rpi-v1.5.0.img`
@@ -72,7 +73,6 @@ the SD image):
 - `flash --hostname pi-thrall-server-01 hypriotos-rpi-v1.5.0.img`
 - `flash --hostname pi-thrall-server-02 hypriotos-rpi-v1.5.0.img`
 - `flash --hostname pi-thrall-database hypriotos-rpi-v1.5.0.img`
-- flash --hostname pi-load-balancer hypriotos-rpi-v1.5.0.img
 
 ## Setup the Router
 
