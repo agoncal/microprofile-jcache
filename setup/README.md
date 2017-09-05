@@ -76,14 +76,18 @@ the SD image):
 
 ## Setup the Router
 
+For this sample, we use the [Ubiquiti EdgeRouter X](https://www.ubnt.com/edgemax/edgerouter-x/). 
+It's a cheap router with a lot of features in it. Any other router should work just fine, but the instructions detailed 
+here are for the EdgeRouter X.
+
 ### Reset to Factory Settings
 * Power on the Ubiquiti Router, place a paper clip or Pin into the hole on the back of the Router labeled Reset.
 * Hold paper clip or pin down for 10 to 15 seconds and release.
 * The Router will reboot on its own. Once the WLAN light stops blinking, the Router is reset.
 
 ### Connect to the Router
-* Plug your computer into eth0 on the router.
-* Configure your computer to have the static IP and route. The Router IP is `192.168.1.1`.
+* Plug your computer into `eth0` on the router.
+* Configure your computer to have the static IP (eg. `192.168.1.3`). The Router IP is `192.168.1.1`.
 
 ![Static IP](router-setup-01.png?raw=true)
 
@@ -94,20 +98,23 @@ the SD image):
 
 ### Setup DHCP Server
 * The Router DHCP Server will provide your PI's with Internet Connection, by sharing a home Internet Connection.
-* Go to Wizards / WAN + 2LAN2 to set up DHCP Server. Use a non convential range like 10.99.99.1 to avoid clashing with 
-other networks. The DHCP will assign IP's from 1 to 10.99.99.255.
+* Go to Wizards / WAN + 2LAN2 to set up DHCP Server. Use a non conventional range like `10.99.99.1` to avoid clashing with 
+other networks. The DHCP will assign IP's from `10.99.99.1` to `10.99.99.255`.
 
 ![WAN + 2LAN2](router-setup-02.png?raw=true)
 
 * Click `Apply` (then `Apply Changes` and `Reboot`). The Router should restart with the new settings.
-* Unplug your computer from the Router and connect your Home Internet in eht0. Plug your computer into any of the other 
-eth ports.
+* Unplug your computer from the Router `eth0` and plug it on another port (eg. `eth4`) 
+* Connect your Home Internet on `eth0`.
 * Remove the static IP from your computer configuration. The router should now assign you a Dynamic IP in the 
-10.99.99.x range.
+`10.99.99.x` range (eg. `10.99.99.x`). On Mac OS X you can force it by renewing the DHCP lease
 * The Router is now available in `https://10.99.99.1`. You require to change the browser address and relog to the Router
 console.
+* At this moment in time, if the Raspberry PIs are switched on, after a few minutes, you should get dynamic IPs for all of them.
 
-### Map Static IP's
+![Dynamic IPs](router-setup-021.png?raw=true)
+
+### (optional) Map Static IP's instead of dynamic if you prefer
 * If you wish, you can assign static IP's to your PI's (not required, but usefull if you want to make sure that you 
 access the same PI with the same IP everytime).
 * Go to Services / LAN / Actions / View Details / Static MAC/IP Mapping.
@@ -118,12 +125,15 @@ access the same PI with the same IP everytime).
 * In the Config Action for each Host you can set up the IP for the Host.
 
 ### Hostname into Hosts files
-* The Route has a hosts files to resolve DNS names.
+* The Router has a hosts files to resolve DNS names.
 * To be able to resolve Hostnames from boxes connecting to the Router, we need to activate a configuration. 
-* Go to Config Tree / service / dhcp-server / hostfile-update, set to "enable", click on preview. (This will register the PI's 
+* Go to Config Tree / service / dhcp-server / hostfile-update, set to "enable", click on preview and apply. (This will register the PI's 
 hostnames in the hosts files and they will be reachable via DNS)
 
 ![Hosts Update](router-setup-04.png?raw=true)
+
+* Now you should ping the hostnames (and not just the physical IP addresses) `ping pi-thrall-server-01`, `ping ppi-client-01`... If this doesn't work
+try to reboot the router (to make sure the hostfile-update set to "enable" has been taken into account)
 
 ### Adding Manual entries to Hosts file
 * This operation can only be done in the CLI console.
